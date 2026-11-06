@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import NetCheckCore
 
@@ -7,13 +8,13 @@ struct ModelsTests {
     @Test func wifiStrengthExcellent() {
         let s = WiFiSignal(rssi: -30, ssid: nil)
         #expect(s.strength == 1.0)
-        #expect(s.label == "Excellent")
+        #expect(s.localizedLabel(locale: Locale(identifier: "fr")) == "Excellent")
     }
 
     @Test func wifiStrengthFaible() {
         let s = WiFiSignal(rssi: -90, ssid: nil)
         #expect(s.strength == 0.0)
-        #expect(s.label == "Faible")
+        #expect(s.localizedLabel(locale: Locale(identifier: "fr")) == "Faible")
     }
 
     @Test func connectivityColor() {

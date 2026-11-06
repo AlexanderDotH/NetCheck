@@ -1,0 +1,52 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSLocalNetworkUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NetCheck monitors your internet connectivity."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NetCheck überwacht die Internetverbindung."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NetCheck surveille votre connexion Internet."
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NetCheck uses location permission to list nearby Wi-Fi networks and their access-point names and addresses, as required by macOS."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NetCheck benötigt den Standortzugriff, um WLAN-Netzwerke in der Nähe mit Namen und BSSID anzuzeigen. macOS setzt diese Berechtigung voraus."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NetCheck utilise votre position pour lister les réseaux Wi-Fi environnants (nom et adresse des points d’accès), comme l’exige macOS."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

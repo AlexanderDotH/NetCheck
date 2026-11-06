@@ -39,6 +39,10 @@ Click to open WiFi Finder, WiFi Diagnostic, Speed Test, Traceroute, or Usage Qua
 | 📊 **Usage Quality** | Single latency measurement mapped to hierarchical thresholds (mail → gaming) |
 | ⚙️ **Preferences** | Launch at login via `SMAppService`, Sparkle auto-updates |
 
+Choose **System default**, **English**, **Deutsch**, or **Français** in Preferences.
+The language changes immediately in open windows and is saved for your next launch.
+System default follows your preferred supported macOS language, with English as the fallback.
+
 ## Install
 
 Grab the latest `.dmg` from the [Releases page](https://github.com/vincentlauriat/NetCheck/releases/latest), mount it, and drag `NetCheck.app` to `/Applications`.

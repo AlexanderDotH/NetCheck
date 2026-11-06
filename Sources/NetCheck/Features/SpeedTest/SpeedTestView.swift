@@ -2,21 +2,22 @@ import SwiftUI
 import NetCheckUI
 
 struct SpeedTestView: View {
+    @Environment(\.locale) private var locale
     @State private var vm = SpeedTestViewModel()
 
     var body: some View {
         FeatureWindowBackground(tintColor: .blue) {
             VStack(spacing: 24) {
-                Text("Speed Test")
+                Text("Speed Test", tableName: "Features")
                     .font(.title2.bold())
                     .padding(.top, 20)
 
                 HStack(spacing: 32) {
                     SpeedGauge(value: vm.download, maxValue: 1000,
-                               label: "Téléchargement", icon: "arrow.down", color: .blue,
+                               label: AppLocalization.string("Download", table: "Features", locale: locale), icon: "arrow.down", color: .blue,
                                isActive: vm.isRunning)
                     SpeedGauge(value: vm.upload, maxValue: 500,
-                               label: "Envoi", icon: "arrow.up", color: .purple,
+                               label: AppLocalization.string("Upload", table: "Features", locale: locale), icon: "arrow.up", color: .purple,
                                isActive: vm.isRunning)
                 }
 
@@ -24,16 +25,18 @@ struct SpeedTestView: View {
                     HStack(spacing: 0) {
                         // RPM
                         VStack(spacing: 4) {
-                            Text("\(vm.rpm)")
+                            Text(verbatim: "\(vm.rpm)")
                                 .font(.system(size: 36, weight: .bold, design: .rounded))
                                 .monospacedDigit()
                                 .foregroundStyle(.primary)
-                            Text("RPM — \(vm.rpmLabel)")
+                            Text(AppLocalization.string("RPM — \(vm.rpmLabel(locale: locale))", table: "Features", locale: locale))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text("Responsiveness Per Minute")
+                            Text("Responsiveness per minute", tableName: "Features")
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                         .frame(maxWidth: .infinity)
 
@@ -42,14 +45,14 @@ struct SpeedTestView: View {
 
                         // Latence
                         VStack(spacing: 4) {
-                            Text(vm.latencyMs > 0 ? String(format: "%.0f ms", vm.latencyMs) : "—")
+                            Text(vm.latencyMs > 0 ? String(format: "%.0f ms", locale: locale, vm.latencyMs) : "—")
                                 .font(.system(size: 36, weight: .bold, design: .rounded))
                                 .monospacedDigit()
                                 .foregroundStyle(.primary)
-                            Text("Latence — \(vm.latencyLabel)")
+                            Text(AppLocalization.string("Latency — \(vm.latencyLabel(locale: locale))", table: "Features", locale: locale))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text("Round-trip time (RTT)")
+                            Text("Round-trip time (RTT)", tableName: "Features")
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)
                         }
@@ -59,8 +62,12 @@ struct SpeedTestView: View {
                 }
                 .padding(.horizontal)
 
-                Button(vm.isRunning ? "Test en cours…" : "Démarrer") {
+                Button {
                     vm.start()
+                } label: {
+                    Text(vm.isRunning
+                        ? AppLocalization.string("Testing…", table: "Features", locale: locale)
+                        : AppLocalization.string("Start", table: "Features", locale: locale))
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(vm.isRunning)

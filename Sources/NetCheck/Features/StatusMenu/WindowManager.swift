@@ -31,7 +31,7 @@ enum WindowManager {
         case .speedTest:  (AnyView(SpeedTestView()),  NSSize(width: 468, height: 480))
         case .traceroute: (AnyView(TracerouteView()), NSSize(width: 640, height: 520))
         case .usage:      (AnyView(UsageView()),       NSSize(width: 1020, height: 480))
-        case .settings:   (AnyView(PreferencesView()), NSSize(width: 380, height: 300))
+        case .settings:   (AnyView(PreferencesView()), NSSize(width: 420, height: 520))
         }
         let isResizable = feature == .wifiFinder || feature == .wifiScan || feature == .speedTest || feature == .traceroute || feature == .usage
         var mask: NSWindow.StyleMask = [.titled, .closable, .fullSizeContentView, .nonactivatingPanel]
@@ -54,7 +54,7 @@ enum WindowManager {
         case .usage:      panel.minSize = NSSize(width: 680, height: 400)
         default: break
         }
-        panel.contentViewController = NSHostingController(rootView: view)
+        panel.contentViewController = NSHostingController(rootView: LocalizedRoot { view })
         panel.center()
 
         let delegate = PanelDelegate(feature: feature)

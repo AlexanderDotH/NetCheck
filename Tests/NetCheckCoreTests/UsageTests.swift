@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import NetCheckCore
 
@@ -5,8 +6,8 @@ import Testing
 struct UsageTests {
 
     @Test func qualityLevelLabels() {
-        #expect(QualityLevel.excellent.label == "Excellent")
-        #expect(QualityLevel.poor.label == "Mauvais")
+        #expect(QualityLevel.excellent.localizedLabel(locale: Locale(identifier: "fr")) == "Excellent")
+        #expect(QualityLevel.poor.localizedLabel(locale: Locale(identifier: "fr")) == "Mauvais")
     }
 
     @Test func usageResultInit() {

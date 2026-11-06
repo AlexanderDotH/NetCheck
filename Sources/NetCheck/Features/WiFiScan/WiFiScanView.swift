@@ -4,6 +4,7 @@ import NetCheckCore
 import NetCheckUI
 
 struct WiFiScanView: View {
+    @Environment(\.locale) private var locale
     @State private var vm = WiFiScanViewModel()
     @State private var groupBySSID = false
 
@@ -11,7 +12,7 @@ struct WiFiScanView: View {
         FeatureWindowBackground(tintColor: .teal) {
             VStack(spacing: 16) {
                 HStack {
-                    Text("Diagnostic Wi-Fi")
+                    Text("Wi-Fi Diagnostics", tableName: "Features")
                         .font(.title2.bold())
                     Spacer()
                     Button {
@@ -23,6 +24,7 @@ struct WiFiScanView: View {
                     }
                     .buttonStyle(.plain)
                     .disabled(vm.isScanning)
+                    .accessibilityLabel(Text("Refresh networks", tableName: "Features"))
                 }
                 .padding(.horizontal)
                 .padding(.top, 20)
@@ -30,7 +32,9 @@ struct WiFiScanView: View {
                 summaryLine
                     .padding(.horizontal)
 
-                Toggle("Grouper les réseaux du même nom", isOn: $groupBySSID)
+                Toggle(isOn: $groupBySSID) {
+                    Text("Group networks with the same name", tableName: "Features")
+                }
                     .toggleStyle(.checkbox)
                     .font(.caption)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -41,7 +45,7 @@ struct WiFiScanView: View {
                         .padding(.horizontal)
                 }
 
-                if let error = vm.errorMessage {
+                if let error = vm.errorMessage(locale: locale) {
                     GlassPanelView {
                         HStack(spacing: 8) {
                             Image(systemName: "exclamationmark.triangle.fill")
@@ -88,10 +92,14 @@ struct WiFiScanView: View {
 
     private var summaryText: String {
         let count = vm.networks.count
-        guard count > 0 else { return vm.isScanning ? "Recherche des réseaux…" : "Aucun réseau détecté" }
-        var parts = ["\(count) réseau\(count > 1 ? "x" : "") détecté\(count > 1 ? "s" : "")"]
+        guard count > 0 else {
+            return vm.isScanning
+                ? AppLocalization.string("Searching for networks…", table: "Features", locale: locale)
+                : AppLocalization.string("No networks detected", table: "Features", locale: locale)
+        }
+        var parts = [AppLocalization.string("\(count) networks detected", table: "Features", locale: locale)]
         if vm.weakSecurityCount > 0 {
-            parts.append("\(vm.weakSecurityCount) non sécurisé\(vm.weakSecurityCount > 1 ? "s" : "")")
+            parts.append(AppLocalization.string("\(vm.weakSecurityCount) unsecured", table: "Features", locale: locale))
         }
         return parts.joined(separator: " · ")
     }
@@ -103,18 +111,23 @@ struct WiFiScanView: View {
                 Image(systemName: vm.locationDenied ? "location.slash.fill" : "location.fill")
                     .foregroundStyle(vm.locationDenied ? .red : .orange)
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(vm.locationDenied ? "Localisation refusée — réseaux non dissociés" : "Localisation requise pour dissocier chaque borne")
+                    Text(vm.locationDenied
+                        ? AppLocalization.string("Location access denied — access points are grouped", table: "Features", locale: locale)
+                        : AppLocalization.string("Location access is needed to identify each access point", table: "Features", locale: locale))
                         .font(.caption.weight(.semibold))
                     Text(vm.locationDenied
-                        ? "Sans cette autorisation, macOS masque le nom et l'adresse (BSSID) de chaque point d'accès — plusieurs bornes portant le même nom apparaissent alors fusionnées en une seule ligne."
-                        : "macOS a besoin de la localisation pour révéler le BSSID de chaque point d'accès Wi-Fi et distinguer deux bornes portant le même nom. Accordez l'autorisation dans la fenêtre système, ou ci-dessous.")
+                        ? AppLocalization.string("Without this permission, macOS hides each access point’s name and address (BSSID). Access points with the same name may appear as a single network.", table: "Features", locale: locale)
+                        : AppLocalization.string("macOS requires location access to reveal Wi-Fi access point addresses (BSSIDs) and distinguish access points with the same name. Allow access in the system prompt.", table: "Features", locale: locale))
                         .font(.caption2)
                         .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                     if vm.locationDenied {
-                        Button("Ouvrir Réglages Système…") {
+                        Button {
                             if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_LocationServices") {
                                 NSWorkspace.shared.open(url)
                             }
+                        } label: {
+                            Text("Open System Settings…", tableName: "Features")
                         }
                         .buttonStyle(.link)
                         .font(.caption2)
@@ -127,6 +140,7 @@ struct WiFiScanView: View {
 }
 
 private struct NetworkRow: View {
+    @Environment(\.locale) private var locale
     let network: WiFiNetworkInfo
     let congestion: Int
 
@@ -152,14 +166,14 @@ private struct NetworkRow: View {
 
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 6) {
-                            Text(network.displayName)
+                            Text(network.localizedDisplayName(locale: locale))
                                 .font(.subheadline.weight(.semibold))
                                 .lineLimit(1)
                             if network.isCurrent {
-                                Tag(text: "Connecté", color: .teal)
+                                Tag(text: AppLocalization.string("Connected", table: "Features", locale: locale), color: .teal)
                             }
                             if network.isAdHoc {
-                                Tag(text: "Ad-hoc", color: .purple)
+                                Tag(text: AppLocalization.string("Ad hoc", table: "Features", locale: locale), color: .purple)
                             }
                         }
                         if let bssid = network.bssid {
@@ -172,10 +186,10 @@ private struct NetworkRow: View {
                     Spacer()
 
                     VStack(alignment: .trailing, spacing: 2) {
-                        Text("\(network.rssi) dBm")
+                        Text(verbatim: "\(network.rssi) dBm")
                             .font(.caption.monospacedDigit().weight(.medium))
                         if let snr = network.snr {
-                            Text("SNR \(snr) dB")
+                            Text(verbatim: "SNR \(snr) dB")
                                 .font(.caption2.monospacedDigit())
                                 .foregroundStyle(snrColor)
                         }
@@ -184,10 +198,13 @@ private struct NetworkRow: View {
 
                 HStack(spacing: 10) {
                     if let channel = network.channelNumber {
-                        Label(
-                            "Canal \(channel)\(network.band.map { " · \($0)" } ?? "")\(network.channelWidth.map { " · \($0)" } ?? "")",
-                            systemImage: "number"
-                        )
+                        Label {
+                            Text(AppLocalization.string("Channel \(channel)", table: "Features", locale: locale)
+                                 + (network.band.map { " · \($0)" } ?? "")
+                                 + (network.channelWidth.map { " · \($0)" } ?? ""))
+                        } icon: {
+                            Image(systemName: "number")
+                        }
                     }
                     if let phy = network.phyMode {
                         Label(phy, systemImage: "waveform")
@@ -199,9 +216,14 @@ private struct NetworkRow: View {
                 .foregroundStyle(.secondary)
 
                 if congestion > 1 {
-                    Label("\(congestion) réseaux détectés sur ce canal — risque d'interférence", systemImage: "exclamationmark.triangle.fill")
+                    Label {
+                        Text(AppLocalization.string("\(congestion) networks on this channel — possible interference", table: "Features", locale: locale))
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                    }
                         .font(.caption2)
                         .foregroundStyle(.orange)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
         }
@@ -209,6 +231,7 @@ private struct NetworkRow: View {
 }
 
 private struct NetworkGroupRow: View {
+    @Environment(\.locale) private var locale
     let group: WiFiScanViewModel.NetworkGroup
     let congestion: (WiFiNetworkInfo) -> Int
     @State private var expanded = false
@@ -240,15 +263,15 @@ private struct NetworkGroupRow: View {
                         SignalBars(strength: strongest.strength, color: tintColor)
                         VStack(alignment: .leading, spacing: 2) {
                             HStack(spacing: 6) {
-                                Text(group.displayName)
+                                Text(strongest.localizedDisplayName(locale: locale))
                                     .font(.subheadline.weight(.semibold))
                                     .lineLimit(1)
                                 if group.networks.contains(where: \.isCurrent) {
-                                    Tag(text: "Connecté", color: .teal)
+                                    Tag(text: AppLocalization.string("Connected", table: "Features", locale: locale), color: .teal)
                                 }
-                                Tag(text: "\(group.networks.count) bornes", color: .secondary)
+                                Tag(text: AppLocalization.string("\(group.networks.count) access points", table: "Features", locale: locale), color: .secondary)
                             }
-                            Text("Meilleur signal \(strongest.rssi) dBm · \(strongest.label)")
+                            Text(AppLocalization.string("Best signal \(strongest.rssi) dBm · \(strongest.localizedLabel(locale: locale))", table: "Features", locale: locale))
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
@@ -275,6 +298,7 @@ private struct Tag: View {
 }
 
 private struct SecurityBadge: View {
+    @Environment(\.locale) private var locale
     let security: WiFiSecurityLevel
 
     private var color: Color {
@@ -293,7 +317,7 @@ private struct SecurityBadge: View {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 8))
             }
-            Text(security.label)
+            Text(security.localizedLabel(locale: locale))
         }
         .font(.caption2.weight(.semibold))
         .foregroundStyle(color)

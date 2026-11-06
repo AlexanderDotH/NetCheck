@@ -6,6 +6,15 @@ public enum UsageProfile: String, CaseIterable, Sendable {
     case videoConf  = "Vidéo conf"
     case gaming     = "Jeux en ligne"
 
+    public func localizedName(locale: Locale) -> String {
+        switch self {
+        case .mail:      return CoreLocalization.string("Email", locale: locale)
+        case .workspace: return CoreLocalization.string("Workspace", locale: locale)
+        case .videoConf: return CoreLocalization.string("Video calls", locale: locale)
+        case .gaming:    return CoreLocalization.string("Online gaming", locale: locale)
+        }
+    }
+
     public var icon: String {
         switch self {
         case .mail:      return "envelope.fill"
@@ -55,11 +64,15 @@ public enum QualityLevel: Sendable {
     case excellent, good, fair, poor
 
     public var label: String {
+        localizedLabel(locale: .current)
+    }
+
+    public func localizedLabel(locale: Locale) -> String {
         switch self {
-        case .excellent: return "Excellent"
-        case .good:      return "Bon"
-        case .fair:      return "Moyen"
-        case .poor:      return "Mauvais"
+        case .excellent: return CoreLocalization.string("Excellent", locale: locale)
+        case .good:      return CoreLocalization.string("Good", locale: locale)
+        case .fair:      return CoreLocalization.string("Fair", locale: locale)
+        case .poor:      return CoreLocalization.string("Poor", locale: locale)
         }
     }
 }

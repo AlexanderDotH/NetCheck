@@ -66,22 +66,22 @@ final class SpeedTestViewModel {
         }
     }
 
-    var rpmLabel: String {
+    func rpmLabel(locale: Locale) -> String {
         switch rpm {
         case 0:       return "—"
-        case ..<400:  return "Moyen"
-        case ..<1000: return "Bon"
-        default:      return "Excellent"
+        case ..<400:  return AppLocalization.string("Fair", table: "Features", locale: locale)
+        case ..<1000: return AppLocalization.string("Good", table: "Features", locale: locale)
+        default:      return AppLocalization.string("Excellent", table: "Features", locale: locale)
         }
     }
 
-    var latencyLabel: String {
+    func latencyLabel(locale: Locale) -> String {
         guard latencyMs > 0 else { return "—" }
         switch latencyMs {
-        case ..<20:  return "Excellent"
-        case ..<60:  return "Bon"
-        case ..<120: return "Moyen"
-        default:     return "Élevé"
+        case ..<20:  return AppLocalization.string("Excellent", table: "Features", locale: locale)
+        case ..<60:  return AppLocalization.string("Good", table: "Features", locale: locale)
+        case ..<120: return AppLocalization.string("Fair", table: "Features", locale: locale)
+        default:     return AppLocalization.string("High", table: "Features", locale: locale)
         }
     }
 }

@@ -3,12 +3,13 @@ import NetCheckCore
 import NetCheckUI
 
 struct WiFiFinderView: View {
+    @Environment(\.locale) private var locale
     @State private var vm = WiFiFinderViewModel()
 
     var body: some View {
         FeatureWindowBackground(tintColor: vm.tintColor) {
             VStack(spacing: 24) {
-                Text("WiFi Finder")
+                Text("Wi-Fi Finder", tableName: "Features")
                     .font(.title2.bold())
                     .padding(.top, 20)
 
@@ -24,9 +25,9 @@ struct WiFiFinderView: View {
                     HStack(spacing: 12) {
                         SignalBars(strength: vm.signal.strength, color: vm.tintColor)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("\(vm.signal.rssi) dBm")
+                            Text(verbatim: "\(vm.signal.rssi) dBm")
                                 .font(.title3.monospacedDigit().bold())
-                            Text(vm.signal.label)
+                            Text(vm.signal.localizedLabel(locale: locale))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -45,10 +46,11 @@ struct WiFiFinderView: View {
                     Image(systemName: vm.moveTipIcon)
                         .font(.caption)
                         .foregroundStyle(vm.tintColor)
-                    Text(vm.moveTip)
+                    Text(vm.moveTip(locale: locale))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.horizontal, 24)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -59,12 +61,15 @@ struct WiFiFinderView: View {
                         Image(systemName: vm.soundEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
                             .foregroundStyle(vm.tintColor)
                         Text(vm.soundEnabled
-                            ? "Écoute les tics — déplace-toi pour trouver le meilleur signal"
-                            : "Active le son pour le mode Geiger")
+                            ? AppLocalization.string("Listen to the clicks and move around to find the strongest signal", table: "Features", locale: locale)
+                            : AppLocalization.string("Enable sound for Geiger mode", table: "Features", locale: locale))
                             .font(.caption)
                             .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                         Spacer()
-                        Toggle("", isOn: $vm.soundEnabled)
+                        Toggle(isOn: $vm.soundEnabled) {
+                            Text("Geiger sound", tableName: "Features")
+                        }
                             .labelsHidden()
                     }
                 }

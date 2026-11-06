@@ -10,8 +10,13 @@ public actor WiFiNetworkScanner {
         case scanFailed(String)
 
         public var errorDescription: String? {
+            localizedDescription(locale: .current)
+        }
+
+        public func localizedDescription(locale: Locale) -> String {
             switch self {
-            case .interfaceUnavailable: return "Interface Wi-Fi indisponible."
+            case .interfaceUnavailable:
+                return CoreLocalization.string("Wi-Fi interface unavailable.", locale: locale)
             case .scanFailed(let message): return message
             }
         }

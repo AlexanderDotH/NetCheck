@@ -2,6 +2,7 @@ import SwiftUI
 import NetCheckUI
 
 struct TracerouteView: View {
+    @Environment(\.locale) private var locale
     @State private var vm = TracerouteViewModel()
 
     var body: some View {
@@ -18,7 +19,7 @@ struct TracerouteView: View {
                     let hop = vm.hops[vm.activeHopIndex]
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Hop \(hop.id + 1) · \(hop.city ?? hop.ip ?? "?")")
+                            Text(AppLocalization.string("Hop \(hop.id + 1) · \(hop.city ?? hop.ip ?? "?")", table: "Features", locale: locale))
                                 .font(.caption.weight(.semibold))
                             if let country = hop.country {
                                 Text(country).font(.caption2).foregroundStyle(.secondary)
@@ -26,7 +27,7 @@ struct TracerouteView: View {
                         }
                         Spacer()
                         if let ms = hop.latencyMs {
-                            Text(String(format: "%.0f ms", ms))
+                            Text(String(format: "%.0f ms", locale: locale, ms))
                                 .font(.caption.monospacedDigit().bold())
                         }
                         if let asn = hop.asn {
@@ -48,9 +49,13 @@ struct TracerouteView: View {
                     .padding(.vertical, 4)
 
                 HStack(spacing: 12) {
-                    Button("Tracer") { vm.start() }
+                    Button { vm.start() } label: {
+                        Text("Trace", tableName: "Features")
+                    }
                         .disabled(vm.isRunning)
-                    Button("Rejouer") { vm.replay() }
+                    Button { vm.replay() } label: {
+                        Text("Replay", tableName: "Features")
+                    }
                         .disabled(vm.isRunning || vm.hops.isEmpty)
                 }
                 .buttonStyle(.borderedProminent)
@@ -60,11 +65,15 @@ struct TracerouteView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "mappin.and.ellipse")
                             .foregroundStyle(.secondary)
-                        TextField("IP ou nom d'hôte", text: $vm.destination)
+                        TextField(text: $vm.destination) {
+                            Text("IP address or hostname", tableName: "Features")
+                        }
                             .textFieldStyle(.plain)
                             .onSubmit { if !vm.isRunning { vm.start() } }
                         if vm.isRunning {
-                            ProgressView().scaleEffect(0.7)
+                            ProgressView()
+                                .scaleEffect(0.7)
+                                .accessibilityLabel(Text("Tracing route…", tableName: "Features"))
                         }
                     }
                 }

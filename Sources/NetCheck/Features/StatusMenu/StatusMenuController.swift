@@ -19,7 +19,7 @@ final class StatusMenuController {
         let popover = NSPopover()
         popover.contentSize = NSSize(width: 300, height: 420)
         popover.behavior = .transient
-        popover.contentViewController = NSHostingController(rootView: StatusMenuView())
+        popover.contentViewController = NSHostingController(rootView: LocalizedRoot { StatusMenuView() })
         self.popover = popover
 
         Task { await monitor.start() }

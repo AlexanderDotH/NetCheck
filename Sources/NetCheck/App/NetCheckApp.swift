@@ -5,6 +5,8 @@ struct NetCheckApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
     var body: some Scene {
-        Settings { PreferencesView() }
+        Settings {
+            LocalizedRoot { PreferencesView() }
+        }
     }
 }

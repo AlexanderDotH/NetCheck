@@ -18,6 +18,7 @@ struct HopListView: View {
 }
 
 struct HopChip: View {
+    @Environment(\.locale) private var locale
     let hop: TracerouteHop
     let isActive: Bool
 
@@ -32,7 +33,7 @@ struct HopChip: View {
                     .lineLimit(1)
             }
             if let ms = hop.latencyMs {
-                Text(String(format: "%.0f ms", ms))
+                Text(String(format: "%.0f ms", locale: locale, ms))
                     .font(.caption2.monospacedDigit())
                     .foregroundStyle(isActive ? .primary : .secondary)
             }

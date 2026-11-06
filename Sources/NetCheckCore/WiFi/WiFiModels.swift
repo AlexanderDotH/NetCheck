@@ -5,12 +5,12 @@ func wifiStrength(forRSSI rssi: Int) -> Double {
     max(0, min(1, Double(rssi + 90) / 60.0))
 }
 
-func wifiLabel(forRSSI rssi: Int) -> String {
+func wifiLabel(forRSSI rssi: Int, locale: Locale) -> String {
     switch rssi {
-    case (-50)...: return "Excellent"
-    case (-65)...: return "Bon"
-    case (-75)...: return "Moyen"
-    default:       return "Faible"
+    case (-50)...: return CoreLocalization.string("Excellent", locale: locale)
+    case (-65)...: return CoreLocalization.string("Good", locale: locale)
+    case (-75)...: return CoreLocalization.string("Fair", locale: locale)
+    default:       return CoreLocalization.string("Weak", locale: locale)
     }
 }
 
@@ -19,7 +19,11 @@ public struct WiFiSignal: Sendable {
     public let ssid: String?
 
     public var strength: Double { wifiStrength(forRSSI: rssi) }
-    public var label: String { wifiLabel(forRSSI: rssi) }
+    public var label: String { localizedLabel(locale: .current) }
+
+    public func localizedLabel(locale: Locale) -> String {
+        wifiLabel(forRSSI: rssi, locale: locale)
+    }
 
     public init(rssi: Int, ssid: String?) {
         self.rssi = rssi; self.ssid = ssid
@@ -30,14 +34,18 @@ public enum WiFiSecurityLevel: Sendable {
     case open, owe, wep, wpa, wpa2, wpa3, unknown
 
     public var label: String {
+        localizedLabel(locale: .current)
+    }
+
+    public func localizedLabel(locale: Locale) -> String {
         switch self {
-        case .open:    return "Ouvert"
+        case .open:    return CoreLocalization.string("Open", locale: locale)
         case .owe:     return "OWE"
         case .wep:     return "WEP"
         case .wpa:     return "WPA"
         case .wpa2:    return "WPA2"
         case .wpa3:    return "WPA3"
-        case .unknown: return "Inconnu"
+        case .unknown: return CoreLocalization.string("Unknown", locale: locale)
         }
     }
 
@@ -67,8 +75,19 @@ public struct WiFiNetworkInfo: Sendable, Identifiable, Hashable {
     public let isCurrent: Bool
 
     public var strength: Double { wifiStrength(forRSSI: rssi) }
-    public var label: String { wifiLabel(forRSSI: rssi) }
-    public var displayName: String { ssid?.isEmpty == false ? ssid! : "Réseau masqué" }
+    public var label: String { localizedLabel(locale: .current) }
+    public var displayName: String { localizedDisplayName(locale: .current) }
+
+    public func localizedLabel(locale: Locale) -> String {
+        wifiLabel(forRSSI: rssi, locale: locale)
+    }
+
+    public func localizedDisplayName(locale: Locale) -> String {
+        guard let ssid, !ssid.isEmpty else {
+            return CoreLocalization.string("Hidden network", locale: locale)
+        }
+        return ssid
+    }
     // Rapport signal/bruit (dB) — plus il est élevé, plus la liaison est propre
     public var snr: Int? { noise.map { rssi - $0 } }
 

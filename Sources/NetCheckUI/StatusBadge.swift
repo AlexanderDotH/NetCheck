@@ -2,6 +2,7 @@ import SwiftUI
 import NetCheckCore
 
 public struct StatusBadge: View {
+    @Environment(\.locale) private var locale
     public let quality: QualityLevel
 
     public init(quality: QualityLevel) { self.quality = quality }
@@ -11,7 +12,7 @@ public struct StatusBadge: View {
             Circle()
                 .fill(color)
                 .frame(width: 8, height: 8)
-            Text(quality.label)
+            Text(quality.localizedLabel(locale: locale))
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(color)
         }

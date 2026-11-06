@@ -7,7 +7,7 @@ import NetCheckCore
 final class WiFiScanViewModel: NSObject, CLLocationManagerDelegate {
     private(set) var networks: [WiFiNetworkInfo] = []
     private(set) var isScanning = false
-    private(set) var errorMessage: String?
+    private(set) var scanError: WiFiNetworkScanner.ScanError?
     private(set) var authorizationStatus: CLAuthorizationStatus = .notDetermined
 
     private let scanner = WiFiNetworkScanner()
@@ -49,7 +49,7 @@ final class WiFiScanViewModel: NSObject, CLLocationManagerDelegate {
     func refresh() {
         guard !isScanning else { return }
         isScanning = true
-        errorMessage = nil
+        scanError = nil
         Task {
             defer { isScanning = false }
             do {
@@ -65,9 +65,13 @@ final class WiFiScanViewModel: NSObject, CLLocationManagerDelegate {
                 tracked = tracked.filter { $0.value.missedScans <= maxMissedScans }
                 networks = tracked.values.map(\.info).sorted { $0.rssi > $1.rssi }
             } catch {
-                errorMessage = error.localizedDescription
+                scanError = error as? WiFiNetworkScanner.ScanError ?? .scanFailed(error.localizedDescription)
             }
         }
+    }
+
+    func errorMessage(locale: Locale) -> String? {
+        scanError?.localizedDescription(locale: locale)
     }
 
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
@@ -105,7 +109,6 @@ final class WiFiScanViewModel: NSObject, CLLocationManagerDelegate {
     // regroupés entre eux, chacun reste une entrée à part.
     struct NetworkGroup: Identifiable {
         let id: String
-        let displayName: String
         let networks: [WiFiNetworkInfo]
     }
 
@@ -113,7 +116,7 @@ final class WiFiScanViewModel: NSObject, CLLocationManagerDelegate {
         Dictionary(grouping: networks) { $0.ssid ?? "hidden:\($0.id)" }
             .map { key, group in
                 let sorted = group.sorted { $0.rssi > $1.rssi }
-                return NetworkGroup(id: key, displayName: sorted[0].displayName, networks: sorted)
+                return NetworkGroup(id: key, networks: sorted)
             }
             .sorted { $0.networks[0].rssi > $1.networks[0].rssi }
     }

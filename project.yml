@@ -7,6 +7,7 @@ options:
   generateEmptyDirectories: true
   groupSortPosition: top
   xcodeVersion: "26.0"
+  developmentLanguage: en
 
 packages:
   Sparkle:
@@ -71,6 +72,7 @@ targets:
         CFBundleDisplayName: NetCheck
         CFBundleShortVersionString: "1.1.0"
         CFBundleVersion: "4"
+        CFBundleLocalizations: [en, de, fr]
         LSMinimumSystemVersion: "26.0"
         LSUIElement: true
         NSHighResolutionCapable: true
@@ -108,7 +110,36 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.vincent.NetCheckCoreTests
         CODE_SIGN_IDENTITY: "-"
 
+  NetCheckTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/NetCheckTests
+    dependencies:
+      - target: NetCheck
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.vincent.NetCheckTests
+        CODE_SIGN_IDENTITY: "-"
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/NetCheck.app/Contents/MacOS/NetCheck"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+
 schemes:
+  NetCheck:
+    build:
+      targets:
+        NetCheck: all
+  NetCheckTests:
+    build:
+      targets:
+        NetCheck: all
+        NetCheckCoreTests: [test]
+        NetCheckTests: [test]
+    test:
+      targets:
+        - NetCheckCoreTests
+        - NetCheckTests
   NetCheckCoreTests:
     build:
       targets:

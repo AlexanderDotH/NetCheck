@@ -8,7 +8,7 @@ struct UsageView: View {
     var body: some View {
         FeatureWindowBackground(tintColor: .indigo) {
             VStack(spacing: 16) {
-                Text("Qualité par usage")
+                Text("Quality by activity", tableName: "Features")
                     .font(.title2.bold())
                     .padding(.top, 20)
 
@@ -30,7 +30,7 @@ struct UsageView: View {
                         ProgressView()
                             .scaleEffect(0.75)
                             .tint(.indigo)
-                        Text("Mesure en cours…")
+                        Text("Measuring…", tableName: "Features")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -39,7 +39,9 @@ struct UsageView: View {
 
                 Spacer()
 
-                Button("Actualiser") { vm.refresh() }
+                Button { vm.refresh() } label: {
+                    Text("Refresh", tableName: "Features")
+                }
                     .buttonStyle(.borderedProminent)
                     .disabled(vm.isLoading)
                     .padding(.bottom, 20)
@@ -51,6 +53,7 @@ struct UsageView: View {
 }
 
 struct UsageCard: View {
+    @Environment(\.locale) private var locale
     let profile: UsageProfile
     let result: UsageResult?
     var isLoading: Bool = false
@@ -63,14 +66,16 @@ struct UsageCard: View {
                     .foregroundStyle(.indigo)
                     .frame(width: 32)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(profile.rawValue).font(.subheadline.weight(.semibold))
+                    Text(profile.localizedName(locale: locale))
+                        .font(.subheadline.weight(.semibold))
+                        .fixedSize(horizontal: false, vertical: true)
                     if let ms = result?.latencyMs {
-                        Text(String(format: "%.0f ms", ms))
+                        Text(String(format: "%.0f ms", locale: locale, ms))
                             .font(.caption2.monospacedDigit())
                             .foregroundStyle(.secondary)
                             .transition(.opacity.combined(with: .move(edge: .bottom)))
                     } else {
-                        Text("—")
+                        Text(verbatim: "—")
                             .font(.caption2.monospacedDigit())
                             .foregroundStyle(.tertiary)
                     }
@@ -85,6 +90,7 @@ struct UsageCard: View {
                             .scaleEffect(0.7)
                             .tint(.indigo.opacity(0.6))
                             .transition(.opacity)
+                            .accessibilityLabel(Text("Measuring…", tableName: "Features"))
                     }
                 }
                 .animation(.spring(duration: 0.4), value: result != nil)

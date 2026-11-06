@@ -1,0 +1,110 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Email" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "E-Mail" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Email" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Mail" } }
+      }
+    },
+    "Excellent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ausgezeichnet" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Excellent" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Excellent" } }
+      }
+    },
+    "Fair" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Mittel" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Fair" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Moyen" } }
+      }
+    },
+    "Good" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Gut" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Good" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Bon" } }
+      }
+    },
+    "Hidden network" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Verborgenes Netzwerk" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Hidden network" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Réseau masqué" } }
+      }
+    },
+    "Online gaming" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Online-Spiele" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Online gaming" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Jeux en ligne" } }
+      }
+    },
+    "Open" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Offen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ouvert" } }
+      }
+    },
+    "Poor" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Schlecht" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Poor" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Mauvais" } }
+      }
+    },
+    "Unknown" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Unbekannt" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unknown" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Inconnu" } }
+      }
+    },
+    "Video calls" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Videoanrufe" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Video calls" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Vidéo conf" } }
+      }
+    },
+    "Weak" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Schwach" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Weak" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Faible" } }
+      }
+    },
+    "Wi-Fi interface unavailable." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "WLAN-Schnittstelle nicht verfügbar." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Wi-Fi interface unavailable." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Interface Wi-Fi indisponible." } }
+      }
+    },
+    "Workspace" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Büroarbeit" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Workspace" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Workspace" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

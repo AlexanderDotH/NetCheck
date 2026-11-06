@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SpeedGauge: View {
+    @Environment(\.locale) private var locale
     let value: Double
     let maxValue: Double
     let label: String
@@ -44,9 +45,9 @@ struct SpeedGauge: View {
                     Image(systemName: icon)
                         .font(.caption)
                         .foregroundStyle(color)
-                    Text(String(format: "%.0f", value))
+                    Text(String(format: "%.0f", locale: locale, value))
                         .font(.title2.monospacedDigit().bold())
-                    Text("Mb/s")
+                    Text(verbatim: "Mb/s")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }

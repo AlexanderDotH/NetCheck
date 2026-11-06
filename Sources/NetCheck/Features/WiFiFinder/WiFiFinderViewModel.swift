@@ -40,11 +40,14 @@ final class WiFiFinderViewModel {
         0.7 + (1 - signal.strength) * 3.8    // 0.7s (fort) → 4.5s (faible)
     }
 
-    var moveTip: String {
+    func moveTip(locale: Locale) -> String {
         switch signal.strength {
-        case 0.7...: return "Signal optimal — vous êtes bien positionné"
-        case 0.4...: return "Déplacez-vous lentement pour trouver un meilleur signal"
-        default:     return "Signal faible — rapprochez-vous du routeur ou changez de pièce"
+        case 0.7...:
+            return AppLocalization.string("Strong signal — this is a good spot", table: "Features", locale: locale)
+        case 0.4...:
+            return AppLocalization.string("Move slowly to find a stronger signal", table: "Features", locale: locale)
+        default:
+            return AppLocalization.string("Weak signal — move closer to the router or try another room", table: "Features", locale: locale)
         }
     }
 

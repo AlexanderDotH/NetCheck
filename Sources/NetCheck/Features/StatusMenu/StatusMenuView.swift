@@ -9,9 +9,9 @@ struct StatusMenuView: View {
                     .foregroundStyle(.green)
                     .font(.title2)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("NetCheck")
+                    Text(verbatim: "NetCheck")
                         .font(.headline)
-                    Text("Connecté")
+                    Text("Connected")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -23,10 +23,10 @@ struct StatusMenuView: View {
             Divider()
 
             Group {
-                MenuRowButton(icon: "antenna.radiowaves.left.and.right", label: "WiFi Finder") {
+                MenuRowButton(icon: "antenna.radiowaves.left.and.right", label: "Wi-Fi Finder") {
                     WindowManager.open(.wifiFinder)
                 }
-                MenuRowButton(icon: "wifi", label: "Diagnostic Wi-Fi") {
+                MenuRowButton(icon: "wifi", label: "Wi-Fi Diagnostics") {
                     WindowManager.open(.wifiScan)
                 }
                 MenuRowButton(icon: "bolt.fill", label: "Speed Test") {
@@ -42,10 +42,10 @@ struct StatusMenuView: View {
 
             Divider()
 
-            MenuRowButton(icon: "gearshape.fill", label: "Préférences") {
+            MenuRowButton(icon: "gearshape.fill", label: "Preferences") {
                 WindowManager.open(.settings)
             }
-            MenuRowButton(icon: "power", label: "Quitter") {
+            MenuRowButton(icon: "power", label: "Quit") {
                 NSApp.terminate(nil)
             }
         }
@@ -55,7 +55,7 @@ struct StatusMenuView: View {
 
 struct MenuRowButton: View {
     let icon: String
-    let label: String
+    let label: LocalizedStringKey
     let action: () -> Void
 
     var body: some View {
