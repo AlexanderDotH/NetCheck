@@ -5,6 +5,7 @@ import NetCheckUI
 struct TracerouteView: View {
     @Environment(\.locale) private var locale
     @State private var vm: TracerouteViewModel
+    @State private var overlayHeight: CGFloat = 0
 
     init(viewModel: TracerouteViewModel? = nil) {
         _vm = State(initialValue: viewModel ?? TracerouteViewModel())
@@ -15,6 +16,7 @@ struct TracerouteView: View {
             GlobeMapView(stops: vm.stops,
                          highlightedHopID: vm.highlightedHopID,
                          isComplete: !vm.isRunning && !vm.stops.isEmpty,
+                         bottomInset: overlayHeight,
                          cameraPosition: $vm.cameraPosition)
 
             VStack(spacing: 10) {
@@ -39,6 +41,7 @@ struct TracerouteView: View {
             }
             .animation(.easeInOut(duration: 0.25), value: vm.focusedHop?.id)
             .animation(.easeInOut(duration: 0.25), value: vm.hops.isEmpty)
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { overlayHeight = $0 }
         }
         .frame(minWidth: 560, minHeight: 440)
         .onDisappear { vm.stop() }

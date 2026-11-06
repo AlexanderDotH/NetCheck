@@ -43,8 +43,8 @@ enum TracerouteRoute {
         return stops
     }
 
-    /// Map area that shows every coordinate, with a margin around the route and extra
-    /// room at the bottom where the hop list and controls cover the map.
+    /// Map area that shows every coordinate with a margin around the route. The map view
+    /// fits it into its safe area, which already excludes the controls drawn over the map.
     static func mapRect(fitting coordinates: [CLLocationCoordinate2D]) -> MKMapRect? {
         guard !coordinates.isEmpty else { return nil }
         let points = coordinates.map(MKMapPoint.init)
@@ -56,10 +56,8 @@ enum TracerouteRoute {
         let width = max(maxX - minX, minimumSide) * 1.4
         let height = max(maxY - minY, minimumSide) * 1.4
 
-        var rect = MKMapRect(x: center.x - width / 2, y: center.y - height / 2,
+        let rect = MKMapRect(x: center.x - width / 2, y: center.y - height / 2,
                              width: width, height: height)
-        // Map y grows southwards: extend the bottom edge for the overlay controls.
-        rect.size.height += height * 0.45
         return rect.intersection(.world).isNull ? .world : rect
     }
 

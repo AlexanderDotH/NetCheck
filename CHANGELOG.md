@@ -33,3 +33,4 @@ Earlier versions are described on the [GitHub releases page](https://github.com/
 - Wi-Fi Diagnostics shows the 2.4 GHz band with the decimal separator of the selected language instead of always "2,4 GHz".
 - Traceroute shows hops that do not answer as "* * *" instead of skipping them.
 - Traceroute no longer turns error output or incomplete lines into bogus hops.
+- Traceroute keeps the Apple Maps attribution, zoom, and compass controls visible above the hop list and control bar.

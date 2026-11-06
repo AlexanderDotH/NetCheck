@@ -38,17 +38,19 @@ struct TracerouteRouteTests {
         #expect(TracerouteRoute.mapRect(fitting: []) == nil)
     }
 
-    @Test func frameContainsTheWholeRouteWithRoomForTheControls() throws {
+    @Test func frameContainsTheWholeRouteWithAMargin() throws {
         let munich = CLLocationCoordinate2D(latitude: 48.14, longitude: 11.58)
         let mountainView = CLLocationCoordinate2D(latitude: 37.39, longitude: -122.08)
         let rect = try #require(TracerouteRoute.mapRect(fitting: [munich, mountainView]))
 
         #expect(rect.contains(MKMapPoint(munich)))
         #expect(rect.contains(MKMapPoint(mountainView)))
-        // More space below the route than above it, for the hop list and the control bar.
-        let routeBottom = max(MKMapPoint(munich).y, MKMapPoint(mountainView).y)
-        let routeTop = min(MKMapPoint(munich).y, MKMapPoint(mountainView).y)
-        #expect(rect.maxY - routeBottom > routeTop - rect.minY)
+        // The route is centred with room on every side.
+        let points = [MKMapPoint(munich), MKMapPoint(mountainView)]
+        let routeWidth = abs(points[0].x - points[1].x)
+        #expect(rect.size.width > routeWidth)
+        #expect(abs(rect.midX - (points[0].x + points[1].x) / 2) < 1)
+        #expect(abs(rect.midY - (points[0].y + points[1].y) / 2) < 1)
     }
 
     @Test func singleCityRouteStillShowsTheSurroundingCountry() throws {

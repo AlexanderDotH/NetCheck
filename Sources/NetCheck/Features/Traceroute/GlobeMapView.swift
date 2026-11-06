@@ -5,6 +5,8 @@ struct GlobeMapView: View {
     let stops: [RouteStop]
     let highlightedHopID: Int?
     let isComplete: Bool
+    /// Height of the controls drawn over the bottom of the map.
+    var bottomInset: CGFloat = 0
     @Binding var cameraPosition: MapCameraPosition
 
     private var route: [CLLocationCoordinate2D] { stops.map(\.coordinate) }
@@ -37,6 +39,8 @@ struct GlobeMapView: View {
             MapCompass()
             MapZoomStepper()
         }
+        // Keeps the Apple Maps attribution, map controls and camera framing above the overlay
+        .safeAreaPadding(.bottom, bottomInset)
         .ignoresSafeArea()
     }
 
