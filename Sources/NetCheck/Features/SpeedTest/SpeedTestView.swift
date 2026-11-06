@@ -10,7 +10,7 @@ struct SpeedTestView: View {
             VStack(spacing: 24) {
                 Text("Speed Test", tableName: "Features")
                     .font(.title2.bold())
-                    .padding(.top, 20)
+                    .padding(.top, 4)
 
                 HStack(spacing: 32) {
                     SpeedGauge(value: vm.download, maxValue: 1000,
@@ -25,11 +25,13 @@ struct SpeedTestView: View {
                     HStack(spacing: 0) {
                         // RPM
                         VStack(spacing: 4) {
-                            Text(verbatim: "\(vm.rpm)")
+                            Text(verbatim: vm.rpm > 0 ? "\(vm.rpm)" : "—")
                                 .font(.system(size: 36, weight: .bold, design: .rounded))
                                 .monospacedDigit()
                                 .foregroundStyle(.primary)
-                            Text(AppLocalization.string("RPM — \(vm.rpmLabel(locale: locale))", table: "Features", locale: locale))
+                            Text(vm.rpm > 0
+                                ? AppLocalization.string("RPM — \(vm.rpmLabel(locale: locale))", table: "Features", locale: locale)
+                                : "RPM")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Text("Responsiveness per minute", tableName: "Features")
@@ -49,7 +51,9 @@ struct SpeedTestView: View {
                                 .font(.system(size: 36, weight: .bold, design: .rounded))
                                 .monospacedDigit()
                                 .foregroundStyle(.primary)
-                            Text(AppLocalization.string("Latency — \(vm.latencyLabel(locale: locale))", table: "Features", locale: locale))
+                            Text(vm.latencyMs > 0
+                                ? AppLocalization.string("Latency — \(vm.latencyLabel(locale: locale))", table: "Features", locale: locale)
+                                : AppLocalization.string("Latency", table: "Features", locale: locale))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Text("Round-trip time (RTT)", tableName: "Features")
@@ -70,8 +74,8 @@ struct SpeedTestView: View {
                         : AppLocalization.string("Start", table: "Features", locale: locale))
                 }
                 .buttonStyle(.borderedProminent)
+                .controlSize(.large)
                 .disabled(vm.isRunning)
-                .glassEffect(in: Capsule())
 
                 Spacer()
             }

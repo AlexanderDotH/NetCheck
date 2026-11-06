@@ -16,8 +16,7 @@ NetCheck/
 │   ├── NetCheckUI/            # Shared SwiftUI components
 │   │   ├── GlassPanelView     # Liquid Glass panel wrapper
 │   │   ├── StatusBadge        # Quality indicator badge
-│   │   ├── OrganicBubble      # Animated organic ellipse
-│   │   └── FeatureWindowBackground  # Tinted background with bubbles
+│   │   └── FeatureWindowBackground  # Tinted gradient backdrop, content kept below the title bar
 │   └── NetCheck/              # App target — assembly only
 │       ├── App/               # NetCheckApp, AppDelegate
 │       ├── Features/          # One folder per feature
@@ -36,7 +35,7 @@ NetCheck/
 | macOS 26 minimum | Native Liquid Glass APIs |
 | XcodeGen + xcodebuild | CLI-only build, no Xcode IDE required |
 | `networkQuality` for speed test | Apple-native, same result as System Settings |
-| MapKit `.imagery(elevation: .realistic)` | 3D globe with camera animation |
+| MapKit `.hybrid(elevation: .realistic)` | 3D globe with country borders and place names; the full route is framed at once |
 | `ip-api.com` for IP geolocation | Free, 45 req/min, no API key |
 | Non-sandboxed | Required for traceroute, CoreWLAN RSSI, networkQuality |
 | Sparkle 2.9.1 | EdDSA signatures, proven in production |

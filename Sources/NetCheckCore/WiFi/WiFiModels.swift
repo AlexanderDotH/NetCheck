@@ -88,8 +88,12 @@ public struct WiFiNetworkInfo: Sendable, Identifiable, Hashable {
         }
         return ssid
     }
-    // Rapport signal/bruit (dB) — plus il est élevé, plus la liaison est propre
-    public var snr: Int? { noise.map { rssi - $0 } }
+    // Rapport signal/bruit (dB) — plus il est élevé, plus la liaison est propre.
+    // CoreWLAN renvoie un bruit de 0 quand il n'est pas mesuré : pas de SNR dans ce cas.
+    public var snr: Int? {
+        guard let noise, noise < 0 else { return nil }
+        return rssi - noise
+    }
 
     public init(
         id: String, ssid: String?, bssid: String?, rssi: Int, noise: Int?,

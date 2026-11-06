@@ -21,7 +21,7 @@ Click to open WiFi Finder, WiFi Diagnostic, Speed Test, Traceroute, or Usage Qua
 | WiFi Finder | Speed Test | Traceroute | Usage Quality |
 |:-----------:|:----------:|:----------:|:-------------:|
 | <img src="docs/screenshots/wifi-finder.png" width="180" alt="WiFi Finder"/> | <img src="docs/screenshots/speed-test.png" width="180" alt="Speed Test"/> | <img src="docs/screenshots/traceroute.png" width="180" alt="Traceroute"/> | <img src="docs/screenshots/usage.png" width="180" alt="Usage Quality"/> |
-| Geiger-counter sound guides you to the strongest WiFi spot | Download, upload, RPM and ping latency via Apple's engine | Animated 3D globe — camera flies to each hop then zooms out | Single latency mapped to hierarchical thresholds per use case |
+| Geiger-counter sound guides you to the strongest WiFi spot | Download, upload, RPM and ping latency via Apple's engine | 3D globe with borders and place names — the whole route at a glance | Single latency mapped to hierarchical thresholds per use case |
 
 </div>
 
@@ -35,7 +35,7 @@ Click to open WiFi Finder, WiFi Diagnostic, Speed Test, Traceroute, or Usage Qua
 | 📡 **WiFi Finder** | Walk around with Geiger-counter sound and concentric waves — find the strongest spot |
 | 🔎 **WiFi Diagnostic** | Every visible access point listed individually (per-BSSID, not grouped by name) with signal, noise/SNR, channel width, Wi-Fi generation and security level — optional grouping by SSID |
 | ⚡ **Speed Test** | Download, upload, RPM and latency via Apple's `networkQuality` engine |
-| 🗺️ **Traceroute** | Animated 3D globe — camera flies from space to each hop, then zooms back out |
+| 🗺️ **Traceroute** | 3D globe with country borders and names — the full route is drawn at once and framed as hops arrive |
 | 📊 **Usage Quality** | Single latency measurement mapped to hierarchical thresholds (mail → gaming) |
 | ⚙️ **Preferences** | Launch at login via `SMAppService`, Sparkle auto-updates |
 
@@ -76,7 +76,7 @@ Three targets, strict Swift 6 concurrency, no sandbox:
 | Target | Role |
 | --- | --- |
 | `NetCheckCore` | Network logic — actors, async/await, zero UI |
-| `NetCheckUI` | Shared SwiftUI components — Liquid Glass panels, `OrganicBubble`, `FeatureWindowBackground` |
+| `NetCheckUI` | Shared SwiftUI components — Liquid Glass panels, `StatusBadge`, `FeatureWindowBackground` |
 | `NetCheck` | App assembly — `NSStatusItem`, `WindowManager`, feature views |
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the full design.

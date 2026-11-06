@@ -306,6 +306,29 @@
         }
       }
     },
+    "Clear selection": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear selection"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auswahl aufheben"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effacer la sélection"
+          }
+        }
+      }
+    },
     "Connected": {
       "extractionState": "manual",
       "localizations": {
@@ -555,6 +578,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Adresse IP ou nom d’hôte"
+          }
+        }
+      }
+    },
+    "Latency": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latency"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latenz"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latence"
           }
         }
       }
@@ -835,29 +881,6 @@
         }
       }
     },
-    "Replay": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Replay"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erneut abspielen"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rejouer"
-          }
-        }
-      }
-    },
     "Responsiveness per minute": {
       "extractionState": "manual",
       "localizations": {
@@ -923,6 +946,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recherche des réseaux…"
+          }
+        }
+      }
+    },
+    "Show entire route": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show entire route"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesamte Route anzeigen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher tout l’itinéraire"
           }
         }
       }

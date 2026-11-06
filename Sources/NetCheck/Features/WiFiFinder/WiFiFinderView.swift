@@ -8,10 +8,10 @@ struct WiFiFinderView: View {
 
     var body: some View {
         FeatureWindowBackground(tintColor: vm.tintColor) {
-            VStack(spacing: 24) {
+            VStack(spacing: 18) {
                 Text("Wi-Fi Finder", tableName: "Features")
                     .font(.title2.bold())
-                    .padding(.top, 20)
+                    .padding(.top, 4)
 
                 ZStack {
                     ConcentricWaves(color: vm.tintColor, duration: vm.waveDuration, strength: vm.signal.strength)
@@ -70,6 +70,8 @@ struct WiFiFinderView: View {
                         Toggle(isOn: $vm.soundEnabled) {
                             Text("Geiger sound", tableName: "Features")
                         }
+                            .toggleStyle(.switch)
+                            .controlSize(.small)
                             .labelsHidden()
                     }
                 }

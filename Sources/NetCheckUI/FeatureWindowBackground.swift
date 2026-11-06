@@ -1,5 +1,10 @@
 import SwiftUI
 
+/// Window backdrop for the feature panels.
+///
+/// The tinted background extends under the transparent title bar, but the content
+/// stays inside the safe area so it never collides with the window buttons or the
+/// title-bar drag region.
 public struct FeatureWindowBackground<Content: View>: View {
     let tintColor: Color
     let content: Content
@@ -10,18 +15,19 @@ public struct FeatureWindowBackground<Content: View>: View {
     }
 
     public var body: some View {
-        ZStack {
-            Rectangle()
-                .fill(.background)
-                .overlay(tintColor.opacity(0.06))
-
-            OrganicBubble(size: 90,  color: tintColor, offset: CGPoint(x: -80, y: -100))
-            OrganicBubble(size: 60,  color: tintColor, offset: CGPoint(x:  90, y: -80))
-            OrganicBubble(size: 70,  color: tintColor, offset: CGPoint(x: -60, y:  80))
-            OrganicBubble(size: 45,  color: tintColor, offset: CGPoint(x:  80, y:  90))
-
-            content
-        }
-        .ignoresSafeArea()
+        content
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .background {
+                ZStack {
+                    Rectangle().fill(.background)
+                    LinearGradient(
+                        colors: [tintColor.opacity(0.16), tintColor.opacity(0.04), .clear],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                }
+                .ignoresSafeArea()
+                .animation(.easeInOut(duration: 0.6), value: tintColor)
+            }
     }
 }

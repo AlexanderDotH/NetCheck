@@ -29,4 +29,16 @@ struct WiFiScannerTests {
         #expect(strongInterval == 80)
         #expect(weakInterval == 2000)
     }
+
+    @Test func snrRequiresAMeasuredNoiseFloor() {
+        func network(noise: Int?) -> WiFiNetworkInfo {
+            WiFiNetworkInfo(id: "a", ssid: "Lab", bssid: nil, rssi: -40, noise: noise,
+                            channelNumber: 36, band: nil, channelWidth: nil, phyMode: nil,
+                            security: .wpa3, isAdHoc: false, isCurrent: false)
+        }
+        #expect(network(noise: -92).snr == 52)
+        // CoreWLAN reports 0 when the noise floor was not measured
+        #expect(network(noise: 0).snr == nil)
+        #expect(network(noise: nil).snr == nil)
+    }
 }

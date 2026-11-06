@@ -27,7 +27,7 @@ struct WiFiScanView: View {
                     .accessibilityLabel(Text("Refresh networks", tableName: "Features"))
                 }
                 .padding(.horizontal)
-                .padding(.top, 20)
+                .padding(.top, 4)
 
                 summaryLine
                     .padding(.horizontal)

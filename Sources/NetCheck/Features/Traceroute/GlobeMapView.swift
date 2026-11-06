@@ -1,64 +1,79 @@
 import SwiftUI
 import MapKit
-import NetCheckCore
 
 struct GlobeMapView: View {
-    let hops: [TracerouteHop]
-    let activeIndex: Int
+    let stops: [RouteStop]
+    let highlightedHopID: Int?
+    let isComplete: Bool
     @Binding var cameraPosition: MapCameraPosition
-    let planeCoordinate: CLLocationCoordinate2D?
-    let planeHeading: Double
-    let planePath: [CLLocationCoordinate2D]
 
-    var hopCoordinates: [CLLocationCoordinate2D] {
-        hops.compactMap { hop in
-            guard let lat = hop.latitude, let lon = hop.longitude else { return nil }
-            return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    private var route: [CLLocationCoordinate2D] { stops.map(\.coordinate) }
+
+    var body: some View {
+        Map(position: $cameraPosition) {
+            // Tracé complet : contour sombre + ligne jaune, en géodésique sur le globe
+            if route.count >= 2 {
+                MapPolyline(coordinates: route, contourStyle: .geodesic)
+                    .stroke(.black.opacity(0.45),
+                            style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
+                MapPolyline(coordinates: route, contourStyle: .geodesic)
+                    .stroke(.yellow,
+                            style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+            }
+
+            ForEach(Array(stops.enumerated()), id: \.element.id) { index, stop in
+                Annotation(stop.city ?? "", coordinate: stop.coordinate, anchor: .center) {
+                    StopMarker(
+                        label: stop.hopLabel,
+                        role: role(at: index),
+                        isHighlighted: highlightedHopID.map(stop.hopIDs.contains) ?? false
+                    )
+                }
+            }
+        }
+        // Hybrid = satellite imagery plus country borders, country and city names.
+        .mapStyle(.hybrid(elevation: .realistic, pointsOfInterest: .excludingAll, showsTraffic: false))
+        .mapControls {
+            MapCompass()
+            MapZoomStepper()
+        }
+        .ignoresSafeArea()
+    }
+
+    private func role(at index: Int) -> StopMarker.Role {
+        if index == 0 { return .origin }
+        if isComplete && index == stops.count - 1 { return .destination }
+        return .transit
+    }
+}
+
+private struct StopMarker: View {
+    enum Role { case origin, transit, destination }
+
+    let label: String
+    let role: Role
+    let isHighlighted: Bool
+
+    private var fill: Color {
+        switch role {
+        case .origin:      return .green
+        case .transit:     return Color(white: 0.12)
+        case .destination: return .red
         }
     }
 
     var body: some View {
-        Map(position: $cameraPosition) {
-            // Trajet de l'avion (trail pointillé blanc)
-            if planePath.count >= 2 {
-                MapPolyline(coordinates: planePath)
-                    .stroke(.white.opacity(0.55), style: StrokeStyle(lineWidth: 2, dash: [6, 4]))
-            }
-
-            // Ligne entre les hops géolocalisés
-            if hopCoordinates.count >= 2 {
-                MapPolyline(coordinates: hopCoordinates)
-                    .stroke(.yellow.opacity(0.5), lineWidth: 1.5)
-            }
-
-            // Pins de localisation pour chaque hop
-            ForEach(hops) { hop in
-                if let lat = hop.latitude, let lon = hop.longitude {
-                    let isActive = hop.id == (activeIndex >= 0 && activeIndex < hops.count ? hops[activeIndex].id : -1)
-                    Annotation(hop.city ?? hop.ip ?? "", coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon)) {
-                        Image(systemName: "mappin.circle.fill")
-                            .font(.system(size: isActive ? 20 : 13))
-                            .foregroundStyle(isActive ? Color.yellow : Color.white)
-                            .shadow(color: isActive ? .yellow.opacity(0.9) : .black.opacity(0.5),
-                                    radius: isActive ? 8 : 2)
-                            .animation(.spring(duration: 0.3), value: isActive)
-                    }
-                }
-            }
-
-            // Avion animé — .id(planeHeading) force MapKit à recréer la vue si le cap change
-            if let coord = planeCoordinate {
-                Annotation("", coordinate: coord) {
-                    Image(systemName: "airplane")
-                        .font(.title2)
-                        .foregroundStyle(.yellow)
-                        .rotationEffect(.degrees(planeHeading - 45))
-                        .shadow(color: .black.opacity(0.8), radius: 4)
-                        .id(planeHeading)
-                }
-            }
-        }
-        .mapStyle(.imagery(elevation: .realistic))
-        .ignoresSafeArea()
+        Text(verbatim: label)
+            .font(.caption2.monospacedDigit().weight(.bold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 6)
+            .frame(minWidth: 22, minHeight: 22)
+            .background(fill, in: Capsule())
+            .overlay(Capsule().strokeBorder(isHighlighted ? Color.yellow : .white.opacity(0.85),
+                                            lineWidth: isHighlighted ? 2.5 : 1.5))
+            .shadow(color: isHighlighted ? .yellow.opacity(0.8) : .black.opacity(0.5),
+                    radius: isHighlighted ? 8 : 3)
+            .scaleEffect(isHighlighted ? 1.25 : 1)
+            .animation(.spring(duration: 0.3), value: isHighlighted)
     }
 }

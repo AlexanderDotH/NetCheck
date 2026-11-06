@@ -10,7 +10,7 @@ struct UsageView: View {
             VStack(spacing: 16) {
                 Text("Quality by activity", tableName: "Features")
                     .font(.title2.bold())
-                    .padding(.top, 20)
+                    .padding(.top, 4)
 
                 // La grille est toujours visible — les cartes passent de "attente" à "résultat"
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
@@ -43,8 +43,9 @@ struct UsageView: View {
                     Text("Refresh", tableName: "Features")
                 }
                     .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
                     .disabled(vm.isLoading)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 16)
             }
             .animation(.easeInOut(duration: 0.3), value: vm.isLoading)
         }

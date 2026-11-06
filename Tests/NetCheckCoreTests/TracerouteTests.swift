@@ -18,6 +18,29 @@ struct TracerouteTests {
         #expect(hop?.isTimeout == true)
     }
 
+    @Test func parseSingleProbeTimeout() {
+        // NetCheck runs traceroute with -q 1, so a silent hop prints a single star
+        let hop = TracerouteService.parse(line: " 4  *", id: 3)
+        #expect(hop?.isTimeout == true)
+        #expect(hop?.id == 3)
+    }
+
+    @Test func parseIPv6Hop() {
+        let hop = TracerouteService.parse(line: " 1  2001:db8::1  1.204 ms", id: 0)
+        #expect(hop?.ip == "2001:db8::1")
+        #expect(hop?.latencyMs == 1.204)
+    }
+
+    @Test(arguments: [
+        "1  traceroute: sendto: No route to host",
+        "12",
+        "2 ms",
+        "5  !H  3.1 ms",
+    ])
+    func rejectsLinesWithoutAHopAddress(line: String) {
+        #expect(TracerouteService.parse(line: line, id: 0) == nil)
+    }
+
     @Test func parseHeader() {
         let hop = TracerouteService.parse(line: "traceroute to 8.8.8.8 (8.8.8.8), 64 hops max", id: 0)
         #expect(hop == nil)
