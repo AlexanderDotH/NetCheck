@@ -60,7 +60,7 @@ public actor WiFiNetworkScanner {
 
     private static func bandLabel(_ band: CWChannelBand?) -> String? {
         switch band {
-        case .band2GHz: return "2,4 GHz"
+        case .band2GHz: return "2.4 GHz"
         case .band5GHz: return "5 GHz"
         case .band6GHz: return "6 GHz"
         default:        return nil

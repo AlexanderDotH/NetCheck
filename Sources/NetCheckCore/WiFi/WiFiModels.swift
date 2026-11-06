@@ -82,6 +82,15 @@ public struct WiFiNetworkInfo: Sendable, Identifiable, Hashable {
         wifiLabel(forRSSI: rssi, locale: locale)
     }
 
+    /// Band with the frequency in the locale's number format: "2.4 GHz" in English, "2,4 GHz" in German and French.
+    public func localizedBand(locale: Locale) -> String? {
+        guard let band else { return nil }
+        let parts = band.split(separator: " ", maxSplits: 1)
+        guard parts.count == 2,
+              let value = Double(parts[0].replacingOccurrences(of: ",", with: ".")) else { return band }
+        return "\(value.formatted(.number.locale(locale))) \(parts[1])"
+    }
+
     public func localizedDisplayName(locale: Locale) -> String {
         guard let ssid, !ssid.isEmpty else {
             return CoreLocalization.string("Hidden network", locale: locale)

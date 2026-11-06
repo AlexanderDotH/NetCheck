@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import NetCheckCore
 
@@ -40,5 +41,18 @@ struct WiFiScannerTests {
         // CoreWLAN reports 0 when the noise floor was not measured
         #expect(network(noise: 0).snr == nil)
         #expect(network(noise: nil).snr == nil)
+    }
+
+    @Test(arguments: [("en", "2.4 GHz"), ("de", "2,4 GHz"), ("fr", "2,4 GHz")])
+    func bandUsesTheLocaleDecimalSeparator(language: String, expected: String) {
+        func network(band: String?) -> WiFiNetworkInfo {
+            WiFiNetworkInfo(id: "a", ssid: "Lab", bssid: nil, rssi: -40, noise: -90,
+                            channelNumber: 6, band: band, channelWidth: nil, phyMode: nil,
+                            security: .wpa3, isAdHoc: false, isCurrent: false)
+        }
+        let locale = Locale(identifier: language)
+        #expect(network(band: "2.4 GHz").localizedBand(locale: locale) == expected)
+        #expect(network(band: "5 GHz").localizedBand(locale: locale) == "5 GHz")
+        #expect(network(band: nil).localizedBand(locale: locale) == nil)
     }
 }

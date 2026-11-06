@@ -30,5 +30,6 @@ Earlier versions are described on the [GitHub releases page](https://github.com/
 
 - Window titles and content no longer overlap the window buttons and title bar.
 - Wi-Fi Diagnostics no longer shows a negative SNR when macOS does not report a noise measurement.
+- Wi-Fi Diagnostics shows the 2.4 GHz band with the decimal separator of the selected language instead of always "2,4 GHz".
 - Traceroute shows hops that do not answer as "* * *" instead of skipping them.
 - Traceroute no longer turns error output or incomplete lines into bogus hops.

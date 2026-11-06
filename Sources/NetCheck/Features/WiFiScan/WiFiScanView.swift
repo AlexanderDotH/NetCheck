@@ -200,7 +200,7 @@ private struct NetworkRow: View {
                     if let channel = network.channelNumber {
                         Label {
                             Text(AppLocalization.string("Channel \(channel)", table: "Features", locale: locale)
-                                 + (network.band.map { " · \($0)" } ?? "")
+                                 + (network.localizedBand(locale: locale).map { " · \($0)" } ?? "")
                                  + (network.channelWidth.map { " · \($0)" } ?? ""))
                         } icon: {
                             Image(systemName: "number")
